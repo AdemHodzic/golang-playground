@@ -25,3 +25,19 @@ func checkError(err error) {
 		panic(err)
 	}
 }
+
+func GetFile() string {
+
+	if len(os.Args) < 2 {
+		panic("You must give us path to file")
+	}
+
+	return os.Args[1]
+}
+
+func GetFiles() []string {
+	if len(os.Args) < 2 {
+		panic("You must give us path to file")
+	}
+	return os.Args[1:]
+}

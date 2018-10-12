@@ -1,36 +1,46 @@
 package main
 
 import (
-	"golang-playground/Day14/models"
+	"golang-playground/Day14/models/color"
+	"golang-playground/Day14/models/file"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/fogleman/gg"
 )
 
 var (
-	width  float64 = 1024
-	height float64 = 768
-	text   []string
+	width  float64  = 1024
+	height float64  = 768
+	files  []string = reader.GetFiles()
+	colors          = color.GetColorConfig()
 )
 
 func main() {
+	for _, file := range files {
+		makeImage(file)
+	}
+}
 
+func makeImage(file string) {
+
+	text := reader.ReadFile(file)
 	context := gg.NewContext(int(width), int(height))
 	drawWindow(context)
 	drawButtons(context)
-	text = reader.ReadFile("buble.py")
 	writeToWindow(text, context)
-	context.SavePNG("out.png")
+	saveImage(context)
 }
 
 func drawWindow(context *gg.Context) {
-	context.SetRGB(100, 100, 128)
+	context.SetHexColor(colors.BackgroundColor)
 	context.Clear()
 	context.DrawRectangle(width*0.1, height*0.05, width*0.8, height*0.05)
-	context.SetRGB255(0, 0, 0)
+	context.SetHexColor(colors.WindowTitle)
 	context.Fill()
 	context.DrawRectangle(width*0.1, height*0.1, width*0.8, height*0.8)
-	context.SetRGB255(30, 30, 30)
+	context.SetHexColor(colors.WindowBackground)
 	context.Fill()
 }
 
@@ -50,7 +60,8 @@ func drawButtons(context *gg.Context) {
 }
 
 func writeToWindow(text []string, context *gg.Context) {
-	context.SetRGB255(240, 255, 43)
+
+	context.SetHexColor(colors.TextColor)
 	context.LoadFontFace("Roboto-Black.ttf", 18)
 	for index, line := range text {
 		x := width*0.2 + countTabs(line)*0.02*width
@@ -63,4 +74,11 @@ func writeToWindow(text []string, context *gg.Context) {
 func countTabs(line string) float64 {
 
 	return float64(strings.Count(line, "\t"))
+}
+
+func saveImage(context *gg.Context) {
+	time.Sleep(1000 * time.Millisecond)
+	now := strconv.FormatInt(time.Now().Unix(), 10)
+	name := "dist/" + now + ".png"
+	context.SavePNG(name)
 }
