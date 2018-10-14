@@ -74,7 +74,6 @@ func writeToWindow(text []string, context *gg.Context) {
 		text = strings.Replace(text, "\t", "", -1)
 		var code line.Line
 		code.Print(context, text, x, y)
-		// context.DrawString(text, x, y)
 	}
 }
 

@@ -41,16 +41,37 @@ func (line *Line) populate(text string) {
 func (word *Word) findColor() {
 	// Temp map
 	syntax := map[string]string{
-		"for":     "#f442b9",
-		"if":      "#f442b9",
-		"in":      "#2e31f4",
-		"range":   "#f7e222",
-		"default": "#eeeeee",
+		"for":      "#f442b9",
+		"if":       "#f442b9",
+		"in":       "#2e31f4",
+		"function": "#f7e222",
+		"default":  "#eeeeee",
+		"variable": "#14fc90",
+	}
+
+	if word.isFunction() {
+		word.color = syntax["function"]
+		return
 	}
 
 	if color, ok := syntax[word.text]; ok {
 		word.color = color
+	} else if word.isVariable() {
+		word.color = syntax["variable"]
 	} else {
 		word.color = syntax["default"]
 	}
+}
+
+func (word *Word) isFunction() bool {
+	return strings.Contains(word.text, "(")
+}
+
+func (word *Word) isVariable() bool {
+	for _, char := range word.text {
+		if (char < 'a' || char > 'z') && (char < 'A' || char > 'Z') {
+			return false
+		}
+	}
+	return true
 }
