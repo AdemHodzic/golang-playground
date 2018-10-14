@@ -3,6 +3,8 @@ package main
 import (
 	"golang-playground/Day14/models/color"
 	"golang-playground/Day14/models/file"
+	"golang-playground/Day14/models/line"
+
 	"log"
 	"strconv"
 	"strings"
@@ -66,11 +68,13 @@ func writeToWindow(text []string, context *gg.Context) {
 
 	context.SetHexColor(colors.TextColor)
 	context.LoadFontFace("Roboto-Black.ttf", 18)
-	for index, line := range text {
-		x := width*0.2 + countTabs(line)*0.02*width
+	for index, text := range text {
+		x := width*0.2 + countTabs(text)*0.02*width
 		y := height*0.2 + (height*0.05)*float64(index)
-		line = strings.Replace(line, "\t", "", -1)
-		context.DrawString(line, x, y)
+		text = strings.Replace(text, "\t", "", -1)
+		var code line.Line
+		code.Print(context, text, x, y)
+		// context.DrawString(text, x, y)
 	}
 }
 
