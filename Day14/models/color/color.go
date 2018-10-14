@@ -21,6 +21,8 @@ func init() {
 		panic(err)
 	}
 
+	defer file.Close()
+
 	jsonParser := json.NewDecoder(file)
 	if err := jsonParser.Decode(&colorConfig); err != nil {
 		panic(err)

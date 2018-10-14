@@ -3,6 +3,7 @@ package main
 import (
 	"golang-playground/Day14/models/color"
 	"golang-playground/Day14/models/file"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -18,7 +19,9 @@ var (
 )
 
 func main() {
+	log.Println("Processing Started...")
 	for _, file := range files {
+		log.Printf("Processing %v...\n", file)
 		makeImage(file)
 	}
 }
